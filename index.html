@@ -13,11 +13,10 @@
     <p class="tagline">Track where your money goes. Everything stays in your browser.</p>
   </header>
 
-  <!-- Shows storage problems (private mode, corrupted data) -->
-  <div id="notice" class="notice" role="status" hidden></div>
+<div id="notice" class="notice" role="status" hidden></div>
 
   <main class="layout">
-    <!-- COMPONENT 1: Expense form (add + edit) -->
+
     <section class="card" aria-labelledby="form-title">
       <h2 id="form-title">Add expense</h2>
       <form id="expense-form" novalidate>
@@ -46,8 +45,7 @@
       </form>
     </section>
 
-    <!-- COMPONENT 2: Summary (total, budget, category chart) -->
-    <section class="card" aria-labelledby="summary-title">
+<section class="card" aria-labelledby="summary-title">
       <h2 id="summary-title">Summary</h2>
       <div class="field-inline">
         <label for="month-filter">Month</label>
@@ -71,8 +69,7 @@
       <ul id="chart" class="chart"></ul>
     </section>
 
-    <!-- COMPONENT 3: Expense list with filters -->
-    <section class="card wide" aria-labelledby="list-title">
+<section class="card wide" aria-labelledby="list-title">
       <h2 id="list-title">Expenses</h2>
       <div class="filters">
         <input id="search" type="search" placeholder="Search notes..." aria-label="Search notes">
@@ -96,8 +93,7 @@
     <p>Built by Venkatesh Pola as a Task 3 practical project. Plain HTML, CSS and JavaScript.</p>
   </footer>
 
-  <!-- Plain scripts (no modules) so index.html works by double-clicking it. Order matters. -->
-  <script src="js/utils.js"></script>
+<script src="js/utils.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/store.js"></script>
   <script src="js/form.js"></script>

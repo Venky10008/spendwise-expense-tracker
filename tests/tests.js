@@ -1,8 +1,3 @@
-/*
- * tests.js - small hand-written test runner (no libraries).
- * Run in the browser: open tests/index.html
- * Run in Node:        node tests/tests.js
- */
 if (typeof require !== 'undefined' && typeof window === 'undefined') require('../js/utils.js');
 (function (root) {
   'use strict';
@@ -18,8 +13,7 @@ if (typeof require !== 'undefined' && typeof window === 'undefined') require('..
     }
   }
 
-  // ---- parseAmount ----
-  test('parses 249.50 to 24950 paise', function () { eq(U.parseAmount('249.50'), { ok: true, value: 24950 }); });
+test('parses 249.50 to 24950 paise', function () { eq(U.parseAmount('249.50'), { ok: true, value: 24950 }); });
   test('parses whole number 500', function () { eq(U.parseAmount('500').value, 50000); });
   test('accepts commas: 1,25,000', function () { eq(U.parseAmount('1,25,000').value, 12500000); });
   test('accepts .5 and 5.', function () { eq(U.parseAmount('.5').value, 50); eq(U.parseAmount('5.').value, 500); });
@@ -32,20 +26,17 @@ if (typeof require !== 'undefined' && typeof window === 'undefined') require('..
   test('rejects absurdly large amount', function () { eq(U.parseAmount('99999999999').ok, false); });
   test('rejects two dots', function () { eq(U.parseAmount('1.2.3').ok, false); });
 
-  // ---- formatMoney ----
-  test('formats with Indian grouping', function () { eq(U.formatMoney(12500000), '\u20B91,25,000.00'); });
+test('formats with Indian grouping', function () { eq(U.formatMoney(12500000), '\u20B91,25,000.00'); });
   test('formats small value', function () { eq(U.formatMoney(5), '\u20B90.05'); });
   test('formats undefined as zero', function () { eq(U.formatMoney(undefined), '\u20B90.00'); });
 
-  // ---- dates ----
-  test('valid date passes', function () { eq(U.isValidDate('2026-11-24'), true); });
+test('valid date passes', function () { eq(U.isValidDate('2026-11-24'), true); });
   test('rejects 31 Feb', function () { eq(U.isValidDate('2026-02-31'), false); });
   test('accepts 29 Feb on a leap year only', function () { eq(U.isValidDate('2028-02-29'), true); eq(U.isValidDate('2027-02-29'), false); });
   test('rejects empty and wrong format', function () { eq(U.isValidDate(''), false); eq(U.isValidDate('24/11/2026'), false); });
   test('toISODate uses local date, pads month and day', function () { eq(U.toISODate(new Date(2026, 0, 5)), '2026-01-05'); });
 
-  // ---- validateExpense ----
-  var good = { amount: '120', category: 'Food', date: '2026-11-20', note: ' Lunch ' };
+var good = { amount: '120', category: 'Food', date: '2026-11-20', note: ' Lunch ' };
   test('valid expense is cleaned (note trimmed)', function () {
     var r = U.validateExpense(good, '2026-11-24');
     eq(r.ok, true); eq(r.clean, { amountPaise: 12000, category: 'Food', date: '2026-11-20', note: 'Lunch' });
@@ -56,8 +47,7 @@ if (typeof require !== 'undefined' && typeof window === 'undefined') require('..
   test('note over 60 chars rejected', function () { eq(U.validateExpense({ amount: '1', category: 'Food', date: '2026-11-20', note: new Array(62).join('a') }, '2026-11-24').ok, false); });
   test('all errors reported together', function () { eq(Object.keys(U.validateExpense({ amount: '', category: '', date: '', note: '' }, '2026-11-24').errors).length, 3); });
 
-  // ---- filter / sort / totals ----
-  var data = [
+var data = [
     { id: 'a', amountPaise: 10000, category: 'Food', date: '2026-11-02', note: 'Biryani', createdAt: 1 },
     { id: 'b', amountPaise: 250000, category: 'Bills', date: '2026-11-10', note: 'Wifi', createdAt: 2 },
     { id: 'c', amountPaise: 5000, category: 'Food', date: '2026-10-30', note: 'Tea', createdAt: 3 },
@@ -74,8 +64,7 @@ if (typeof require !== 'undefined' && typeof window === 'undefined') require('..
   test('totalsByCategory, biggest first', function () { var t = U.totalsByCategory(data); eq(t[0].category, 'Bills'); eq(t[0].total, 250000); });
   test('totalsByCategory of empty list is empty', function () { eq(U.totalsByCategory([]), []); });
 
-  // ---- CSV ----
-  test('csv wraps cells with commas and doubles quotes', function () {
+test('csv wraps cells with commas and doubles quotes', function () {
     var csv = U.toCSV([{ date: '2026-11-02', category: 'Food', amountPaise: 12050, note: 'Dosa, "special"' }]);
     eq(csv.split('\n')[1], '2026-11-02,Food,120.50,"Dosa, ""special"""');
   });
@@ -85,8 +74,7 @@ if (typeof require !== 'undefined' && typeof window === 'undefined') require('..
   });
   test('makeId gives different ids', function () { eq(U.makeId() !== U.makeId(), true); });
 
-  // ---- report ----
-  var failed = results.filter(function (r) { return !r.pass; });
+var failed = results.filter(function (r) { return !r.pass; });
   if (typeof document !== 'undefined') {
     var out = document.getElementById('results');
     out.innerHTML = '<h2>' + (results.length - failed.length) + ' / ' + results.length + ' passed</h2>';
