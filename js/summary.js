@@ -33,6 +33,7 @@ var fill = $('budget-fill');
 
 var chart = $('chart');
     chart.innerHTML = '';
+    renderTrend(state);
     var rows = U.totalsByCategory(inMonth);
     if (rows.length === 0) {
       var li = document.createElement('li'); li.className = 'muted'; li.textContent = 'Nothing to show yet.'; chart.appendChild(li);
@@ -51,6 +52,31 @@ var chart = $('chart');
       item.appendChild(label); item.appendChild(track); item.appendChild(value);
       chart.appendChild(item);
     });
+  }
+
+  function renderTrend(state) {
+    var list = $('trend');
+    list.innerHTML = '';
+    var end = month || U.todayISO().slice(0, 7);
+    var rows = U.monthlyTotals(state.expenses, end, 6);
+    var max = rows.reduce(function (m, r) { return Math.max(m, r.total); }, 0);
+    rows.forEach(function (r) {
+      var item = document.createElement('li');
+      item.className = 'chart-row';
+      var label = document.createElement('span'); label.className = 'chart-label'; label.textContent = shortMonth(r.month);
+      var track = document.createElement('span'); track.className = 'chart-track';
+      var bar = document.createElement('span'); bar.className = 'chart-bar';
+      bar.style.width = (max ? Math.max(r.total / max * 100, r.total ? 2 : 0) : 0) + '%';
+      track.appendChild(bar);
+      var value = document.createElement('span'); value.className = 'chart-value'; value.textContent = U.formatMoney(r.total);
+      item.appendChild(label); item.appendChild(track); item.appendChild(value);
+      list.appendChild(item);
+    });
+  }
+
+  function shortMonth(m) {
+    var p = m.split('-');
+    return new Date(Number(p[0]), Number(p[1]) - 1, 1).toLocaleString('en-IN', { month: 'short', year: '2-digit' });
   }
 
   function monthLabel(m) {

@@ -50,11 +50,30 @@ function remove(id) {
     persist(); emit();
   }
 
+  function addMany(list) {
+    var seen = {};
+    state.expenses.forEach(function (e) { seen[root.SW.utils.expenseKey(e)] = true; });
+    var added = 0;
+    var duplicates = 0;
+    var now = Date.now();
+    var fresh = [];
+    list.forEach(function (f) {
+      var key = root.SW.utils.expenseKey(f);
+      if (seen[key]) { duplicates++; return; }
+      seen[key] = true;
+      fresh.push({ id: root.SW.utils.makeId() + added, amountPaise: f.amountPaise, category: f.category,
+                   date: f.date, note: f.note, createdAt: now + added });
+      added++;
+    });
+    if (added > 0) { state.expenses = state.expenses.concat(fresh); persist(); emit(); }
+    return { added: added, duplicates: duplicates };
+  }
+
   function setBudget(paise) { state.budgetPaise = paise; persist(); emit(); }
   function get(id) { return state.expenses.filter(function (e) { return e.id === id; })[0] || null; }
   function subscribe(fn) { listeners.push(fn); }
 
   root.SW = root.SW || {};
-  root.SW.store = { init: init, add: add, update: update, remove: remove, restore: restore,
+  root.SW.store = { init: init, add: add, update: update, remove: remove, restore: restore, addMany: addMany,
                     setBudget: setBudget, get: get, subscribe: subscribe, state: function () { return state; } };
 })(window);

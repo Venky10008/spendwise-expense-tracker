@@ -39,5 +39,13 @@
     renderAll();
   }
 
+  function registerWorker() {
+    var secure = root.location.protocol === 'https:' || root.location.hostname === 'localhost' || root.location.hostname === '127.0.0.1';
+    if (!('serviceWorker' in root.navigator) || !secure) return;
+    if (!root.document.querySelector('link[rel="manifest"][data-built]')) return;
+    root.navigator.serviceWorker.register('sw.js').catch(function () {});
+  }
+
   document.addEventListener('DOMContentLoaded', start);
+  root.addEventListener('load', registerWorker);
 })(window);

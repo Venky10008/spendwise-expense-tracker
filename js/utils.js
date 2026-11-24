@@ -105,11 +105,88 @@ function csvCell(v) {
     return rows.join('\n');
   }
 
+  var HEADER = 'Date,Category,Amount (INR),Note';
+  var MAX_IMPORT_ROWS = 5000;
+
+  function parseCSV(text) {
+    var rows = [];
+    var row = [];
+    var cell = '';
+    var quoted = false;
+    var s = String(text == null ? '' : text).replace(/^\uFEFF/, '');
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i];
+      if (quoted) {
+        if (c === '"') {
+          if (s[i + 1] === '"') { cell += '"'; i++; } else quoted = false;
+        } else cell += c;
+      } else if (c === '"' && cell === '') {
+        quoted = true;
+      } else if (c === ',') {
+        row.push(cell); cell = '';
+      } else if (c === '\n' || c === '\r') {
+        if (c === '\r' && s[i + 1] === '\n') i++;
+        row.push(cell); cell = '';
+        rows.push(row); row = [];
+      } else cell += c;
+    }
+    if (quoted) return { ok: false, error: 'The file has a quote that never closes.' };
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return { ok: true, rows: rows.filter(function (r) { return !(r.length === 1 && r[0].trim() === ''); }) };
+  }
+
+  function expenseKey(e) {
+    return [e.date, e.category, e.amountPaise, e.note].join('|');
+  }
+
+  function parseImport(text, today) {
+    var parsed = parseCSV(text);
+    if (!parsed.ok) return { ok: false, error: parsed.error, items: [], errors: [] };
+    var rows = parsed.rows;
+    if (rows.length === 0) return { ok: false, error: 'The file is empty.', items: [], errors: [] };
+    var head = rows[0].map(function (h) { return h.trim().toLowerCase(); }).join(',');
+    if (head !== HEADER.toLowerCase()) {
+      return { ok: false, error: 'The first row must be: ' + HEADER, items: [], errors: [] };
+    }
+    if (rows.length - 1 > MAX_IMPORT_ROWS) {
+      return { ok: false, error: 'Too many rows (limit ' + MAX_IMPORT_ROWS + ').', items: [], errors: [] };
+    }
+    var items = [];
+    var errors = [];
+    rows.slice(1).forEach(function (r, i) {
+      var line = i + 2;
+      if (r.length !== 4) { errors.push({ line: line, message: 'expected 4 columns, found ' + r.length }); return; }
+      var category = CATEGORIES.filter(function (c) { return c.toLowerCase() === r[1].trim().toLowerCase(); })[0] || r[1];
+      var note = r[3].replace(/^'(?=[=+\-@])/, '');
+      var result = validateExpense({ amount: r[2], category: category, date: r[0].trim(), note: note }, today);
+      if (!result.ok) {
+        errors.push({ line: line, message: Object.keys(result.errors).map(function (k) { return result.errors[k]; }).join(' ') });
+        return;
+      }
+      items.push(result.clean);
+    });
+    return { ok: true, items: items, errors: errors };
+  }
+
+  function monthlyTotals(expenses, endMonth, count) {
+    var p = endMonth.split('-').map(Number);
+    var months = [];
+    for (var i = count - 1; i >= 0; i--) {
+      var d = new Date(p[0], p[1] - 1 - i, 1);
+      months.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+    }
+    var totals = {};
+    expenses.forEach(function (e) { var m = e.date.slice(0, 7); totals[m] = (totals[m] || 0) + e.amountPaise; });
+    return months.map(function (m) { return { month: m, total: totals[m] || 0 }; });
+  }
+
   var api = {
     CATEGORIES: CATEGORIES, MAX_NOTE: MAX_NOTE,
     parseAmount: parseAmount, formatMoney: formatMoney, toISODate: toISODate, todayISO: todayISO,
     isValidDate: isValidDate, validateExpense: validateExpense, makeId: makeId,
-    filterAndSort: filterAndSort, sumPaise: sumPaise, totalsByCategory: totalsByCategory, toCSV: toCSV
+    filterAndSort: filterAndSort, sumPaise: sumPaise, totalsByCategory: totalsByCategory, toCSV: toCSV,
+    parseCSV: parseCSV, parseImport: parseImport, expenseKey: expenseKey, monthlyTotals: monthlyTotals,
+    CSV_HEADER: HEADER, MAX_IMPORT_ROWS: MAX_IMPORT_ROWS
   };
   root.SW = root.SW || {};
   root.SW.utils = api;
