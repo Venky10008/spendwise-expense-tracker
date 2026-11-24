@@ -1,13 +1,14 @@
 {
   "name": "spendwise-expense-tracker",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "SpendWise expense tracker with a repeatable build, verify and release flow",
+  "description": "SpendWise expense tracker with CSV import, offline support and a repeatable build, verify and release flow",
   "scripts": {
-    "test": "node tests-task4/run-all.js && node deploy/tests.js",
+    "test": "node tests-task4/run-all.js && node tests-final/run-all.js && node deploy/tests.js",
     "build": "node deploy/build.js",
     "verify": "node deploy/verify.js dist",
     "check:browser": "node deploy/browser-check.js dist",
+    "check:final": "node tests-final/e2e.js dist",
     "serve": "node deploy/serve.js dist 8080",
     "stage": "node deploy/release.js deploy .deploy/staging",
     "promote": "node deploy/release.js promote .deploy/staging .deploy/production",

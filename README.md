@@ -1,8 +1,8 @@
 # SpendWise - Expense Tracker
 
-My Task 3 project: a small expense tracker built with plain HTML, CSS and JavaScript. No frameworks, no build step.
+A small expense tracker built with plain HTML, CSS and JavaScript. No frameworks. The source runs as it is; the build step only makes the production copy.
 
-![SpendWise on desktop](screenshots/app-desktop.png)
+![SpendWise on desktop](screenshots/app-final-desktop.png)
 
 Double-click `index.html` to run it. Data is saved in localStorage, so it stays after a refresh.
 
@@ -11,9 +11,11 @@ What it does:
 - add, edit and delete expenses (delete has a 5 second undo)
 - monthly total, spending by category, and a budget bar
 - search, filter and sort the list
-- export to CSV
+- export to CSV and import it back (duplicates and bad rows are skipped and reported)
+- last 6 months chart
+- works offline after the first load (service worker)
 
-Tests: open `tests/index.html` in a browser, or run `node tests/tests.js` (39 tests).
+Tests: `npm test` runs the unit, edge, integration, performance and deploy tests. `npm run build` then `npm run check:final` runs the real-browser checks (import, offline, mobile width).
 
 The code is split into small files: `utils.js` has the helper functions, `storage.js` is the only file that talks to localStorage, `store.js` holds the data, `form.js`, `summary.js` and `list.js` are the three UI parts, and `app.js` wires them together. Money is stored as paise (integers) because floats add up wrong, and dates are stored as plain `YYYY-MM-DD` strings.
 

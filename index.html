@@ -6,6 +6,8 @@
   <meta name="description" content="SpendWise: a simple expense tracker built with plain HTML, CSS and JavaScript.">
   <title>SpendWise | Expense Tracker</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#3b5bdb">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -68,6 +70,9 @@
 
       <h3>By category</h3>
       <ul id="chart" class="chart"></ul>
+
+      <h3>Last 6 months</h3>
+      <ul id="trend" class="chart"></ul>
     </section>
 
 <section class="card wide" aria-labelledby="list-title">
@@ -82,16 +87,20 @@
           <option value="amount-asc">Lowest amount</option>
         </select>
         <button type="button" id="export-btn" class="btn small">Export CSV</button>
+        <button type="button" id="import-btn" class="btn small">Import CSV</button>
+        <input id="import-file" type="file" accept=".csv,text/csv" aria-label="Choose a CSV file to import" hidden>
       </div>
+      <div id="import-report" class="import-report" role="status" hidden></div>
       <ul id="expense-list" class="expense-list"></ul>
       <p id="empty" class="muted empty" hidden></p>
+      <div class="more-row"><button type="button" id="show-more" class="btn small" hidden>Show more</button></div>
     </section>
   </main>
 
   <div id="toast" class="toast" role="status" hidden></div>
 
   <footer class="site-footer">
-    <p>Built by Venkatesh Pola as a Task 3 practical project. Plain HTML, CSS and JavaScript.</p>
+    <p>Built by Venkatesh Pola. Plain HTML, CSS and JavaScript. Works offline once loaded.</p>
   </footer>
 
 <script src="js/utils.js"></script>
