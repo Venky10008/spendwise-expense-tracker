@@ -8,6 +8,8 @@ var TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+  '.webmanifest': 'application/manifest+json',
   '.txt': 'text/plain; charset=utf-8'
 };
 
@@ -56,6 +58,7 @@ function createServer(dir, options) {
     } else {
       var rel = url === '/' ? 'index.html' : url.replace(/^\/+/, '');
       var file = path.resolve(dir, rel);
+      if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
       var inside = file === path.resolve(dir) || file.indexOf(path.resolve(dir) + path.sep) === 0;
       if (inside && fs.existsSync(file) && fs.statSync(file).isFile()) {
         body = fs.readFileSync(file);

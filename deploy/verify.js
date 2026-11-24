@@ -51,6 +51,15 @@ function run(dir) {
           check('referrer policy is no-referrer', home.headers['referrer-policy'] === 'no-referrer');
           check('page has no inline script', !/<script(?![^>]*src=)/.test(html));
 
+          var worker = await get(port, '/sw.js');
+          check('service worker script is served as JavaScript', worker.status === 200 && /javascript/.test(worker.headers['content-type'] || ''), worker.headers['content-type']);
+          check('service worker may fetch from its own origin', /connect-src 'self'/.test(worker.headers['content-security-policy'] || ''), worker.headers['content-security-policy']);
+          check('service worker script is never cached long', worker.headers['cache-control'] === 'no-cache', worker.headers['cache-control']);
+          var manifest = await get(port, '/manifest.webmanifest');
+          check('web app manifest lists icons that exist', manifest.status === 200 && JSON.parse(manifest.body).icons.every(function (i) { return fs.existsSync(path.join(dir, i.src)); }));
+          var robots = await get(port, '/robots.txt');
+          check('robots.txt is served', robots.status === 200 && /User-agent/.test(robots.body.toString()), robots.status);
+
           var missing = await get(port, '/does-not-exist');
           check('unknown path returns 404', missing.status === 404, missing.status);
           check('unknown path shows the 404 page', /Page not found/.test(missing.body.toString()));

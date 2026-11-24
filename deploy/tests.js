@@ -56,6 +56,42 @@ test('version.json lists every file except itself', function () {
   eq(listed.indexOf('index.html') !== -1 && listed.indexOf('_headers') !== -1, true);
 });
 
+var worker = fs.readFileSync(path.join(dirA, 'sw.js'), 'utf8');
+var precached = JSON.parse(/FILES=(\[[^\]]*\])/.exec(worker)[1]);
+test('service worker precaches the shell, the hashed assets, the manifest and the icons', function () {
+  eq(precached.indexOf('./') !== -1 && precached.indexOf('index.html') !== -1 && precached.indexOf('manifest.webmanifest') !== -1, true);
+  eq(precached.filter(function (f) { return /^assets\//.test(f); }).length, 2);
+  eq(precached.filter(function (f) { return /^icons\//.test(f); }).length, 2);
+});
+test('service worker never precaches the 404 page, headers or robots.txt', function () {
+  eq(precached.some(function (f) { return ['404.html', '_headers', 'robots.txt', '.nojekyll'].indexOf(f) !== -1; }), false);
+});
+test('every precached file exists in the build', function () {
+  eq(precached.filter(function (f) { return f !== './' && !fs.existsSync(path.join(dirA, f)); }), []);
+});
+test('service worker cache name is the same for the same source', function () {
+  var dirD = path.join(tmp, 'd');
+  build(dirD);
+  eq(/spendwise-[0-9a-f]{10}/.exec(fs.readFileSync(path.join(dirD, 'sw.js'), 'utf8'))[0], /spendwise-[0-9a-f]{10}/.exec(worker)[0]);
+});
+test('service worker cache name changes when the app code changes', function () {
+  var copy = path.join(tmp, 'src');
+  fs.cpSync(path.join(__dirname, '..'), copy, { recursive: true, filter: function (f) { return !/node_modules|\.git$|\.git\//.test(f) && !/dist/.test(path.relative(path.join(__dirname, '..'), f)); } });
+  fs.appendFileSync(path.join(copy, 'js', 'app.js'), '\nwindow.__probe = 1;\n');
+  fs.symlinkSync(path.join(__dirname, '..', 'node_modules'), path.join(copy, 'node_modules'));
+  var out = path.join(tmp, 'e');
+  cp.execFileSync('node', [path.join(copy, 'deploy', 'build.js'), out], { stdio: 'ignore' });
+  eq(/spendwise-[0-9a-f]{10}/.exec(fs.readFileSync(path.join(out, 'sw.js'), 'utf8'))[0] !== /spendwise-[0-9a-f]{10}/.exec(worker)[0], true);
+});
+test('source files of the final features contain no comments', function () {
+  var sources = ['js/utils.js', 'js/list.js', 'js/summary.js', 'js/store.js', 'js/app.js', 'sw.template.js', 'tests-final/unit.js', 'tests-final/e2e.js'];
+  var found = sources.filter(function (f) {
+    var text = fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
+    return /^\s*\/\/|\/\*\s/m.test(text);
+  });
+  eq(found, []);
+});
+
 var chain = Promise.resolve();
 var env = path.join(tmp, 'env');
 var first, second;

@@ -9,7 +9,7 @@ var out = path.resolve(process.argv[2] || path.join(root, 'dist'));
 var base = process.env.BASE_PATH || '/';
 if (base.slice(-1) !== '/') base += '/';
 
-var CSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'";
+var CSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'";
 
 function hash(buf) {
   return crypto.createHash('sha256').update(buf).digest('hex');
@@ -50,6 +50,7 @@ fs.writeFileSync(path.join(out, cssName), css);
 
 var page = html
   .replace(scriptRe, '')
+  .replace('<link rel="manifest" href="manifest.webmanifest">', '<link rel="manifest" href="manifest.webmanifest" data-built>')
   .replace(cssMatch[0], '<meta http-equiv="Content-Security-Policy" content="' + CSP + '"><link rel="stylesheet" href="' + cssName + '">')
   .replace('</body>', '<script src="' + jsName + '"></script></body>')
   .replace(/\s*\n\s*/g, '');
@@ -73,11 +74,27 @@ var headers = [
   '  Cache-Control: public, max-age=31536000, immutable',
   '/index.html',
   '  Cache-Control: no-cache',
+  '/sw.js',
+  '  Cache-Control: no-cache',
   ''
 ].join('\n');
 fs.writeFileSync(path.join(out, '_headers'), headers);
 fs.writeFileSync(path.join(out, '.nojekyll'), '');
 fs.copyFileSync(path.join(root, 'favicon.svg'), path.join(out, 'favicon.svg'));
+fs.copyFileSync(path.join(root, 'manifest.webmanifest'), path.join(out, 'manifest.webmanifest'));
+fs.copyFileSync(path.join(root, 'robots.txt'), path.join(out, 'robots.txt'));
+fs.mkdirSync(path.join(out, 'icons'));
+fs.readdirSync(path.join(root, 'icons')).forEach(function (f) {
+  fs.copyFileSync(path.join(root, 'icons', f), path.join(out, 'icons', f));
+});
+
+var precache = ['./'].concat(fs.readdirSync(out, { recursive: true }).filter(function (f) {
+  return fs.statSync(path.join(out, f)).isFile() && ['404.html', '_headers', '.nojekyll', 'robots.txt'].indexOf(f) === -1;
+}).map(function (f) { return f.split(path.sep).join('/'); }).sort());
+var workerId = hash(precache.map(function (f) { return f === './' ? '' : hash(fs.readFileSync(path.join(out, f))); }).join('')).slice(0, 10);
+fs.writeFileSync(path.join(out, 'sw.js'), esbuild.transformSync(
+  read('sw.template.js').replace('__ID__', workerId).replace('__FILES__', JSON.stringify(precache)),
+  { minify: true, target: 'es2017', legalComments: 'none' }).code);
 
 var files = fs.readdirSync(out, { recursive: true }).filter(function (f) {
   return fs.statSync(path.join(out, f)).isFile() && f !== 'version.json';
