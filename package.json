@@ -1,0 +1,23 @@
+{
+  "name": "spendwise-expense-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SpendWise expense tracker with a repeatable build, verify and release flow",
+  "scripts": {
+    "test": "node tests-task4/run-all.js && node deploy/tests.js",
+    "build": "node deploy/build.js",
+    "verify": "node deploy/verify.js dist",
+    "check:browser": "node deploy/browser-check.js dist",
+    "serve": "node deploy/serve.js dist 8080",
+    "stage": "node deploy/release.js deploy .deploy/staging",
+    "promote": "node deploy/release.js promote .deploy/staging .deploy/production",
+    "rollback": "node deploy/release.js rollback .deploy/production",
+    "status": "node deploy/release.js status .deploy/production"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
