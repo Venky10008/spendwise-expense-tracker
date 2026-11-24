@@ -2,7 +2,7 @@
   --bg: #f4f6fb;
   --card: #ffffff;
   --text: #1f2937;
-  --muted: #6b7280;
+  --muted: #5b6472;
   --primary: #3b5bdb;
   --primary-dark: #2f49b3;
   --danger: #c92a2a;
@@ -61,7 +61,8 @@ input.invalid, select.invalid { border-color: var(--danger); background: #fff5f5
 .bar-fill.over { background: var(--danger); }
 
 .chart { list-style: none; padding: 0; margin: 0; }
-.chart-row { display: grid; grid-template-columns: 95px 1fr; gap: 4px 8px; align-items: center; margin-bottom: 10px; font-size: .9rem; }
+#trend { min-height: 310px; }
+.chart-row { display: grid; grid-template-columns: 115px 1fr; gap: 4px 8px; align-items: center; margin-bottom: 10px; font-size: .9rem; }
 .chart-track { background: #e6e9f2; border-radius: 4px; height: 10px; overflow: hidden; }
 .chart-bar { display: block; height: 100%; background: var(--primary); border-radius: 4px; }
 .chart-value { grid-column: 2; color: var(--muted); font-size: .8rem; }
@@ -80,13 +81,17 @@ input.invalid, select.invalid { border-color: var(--danger); background: #fff5f5
   background: #1f2937; color: #fff; padding: 10px 14px; border-radius: 8px;
   display: flex; gap: 12px; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,.25); z-index: 10;
 }
-.toast[hidden], .notice[hidden], .empty[hidden] { display: none; }
+.import-report { background: #eef1f8; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; margin-bottom: 12px; font-size: .9rem; }
+.import-report ul { margin: 6px 0 0; padding-left: 20px; }
+.more-row { text-align: center; padding-top: 12px; }
+.more-row [hidden] { display: none; }
+.toast[hidden], .notice[hidden], .empty[hidden], .import-report[hidden] { display: none; }
 .site-footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 20px 16px 30px; }
 
 @media (min-width: 800px) {
   .layout { grid-template-columns: 1fr 1fr; }
   .card.wide { grid-column: 1 / -1; }
-  .filters { grid-template-columns: 2fr 1fr 1fr auto; }
+  .filters { grid-template-columns: 2fr 1fr 1fr auto auto; }
   .expense { grid-template-columns: 1fr auto auto; }
   .expense-actions { grid-column: auto; }
 }
