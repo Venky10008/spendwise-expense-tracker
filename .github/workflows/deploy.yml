@@ -31,6 +31,9 @@ jobs:
       - run: npm run check:browser
         env:
           CHROME_PATH: google-chrome
+      - run: npm run check:final
+        env:
+          CHROME_PATH: google-chrome
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
