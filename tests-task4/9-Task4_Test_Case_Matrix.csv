@@ -1,0 +1,117 @@
+ID,Level,Type,File,Test case (what it checks),Expected,Actual
+TC001,Unit,unit,tests/tests.js,parses 249.50 to 24950 paise,Pass,Pass
+TC002,Unit,unit,tests/tests.js,parses whole number 500,Pass,Pass
+TC003,Unit,unit,tests/tests.js,"accepts commas: 1,25,000",Pass,Pass
+TC004,Unit,unit,tests/tests.js,accepts .5 and 5.,Pass,Pass
+TC005,Unit,unit,tests/tests.js,0.1 + 0.2 style sums stay exact,Pass,Pass
+TC006,Unit,unit,tests/tests.js,rejects empty,Pass,Pass
+TC007,Unit,unit,tests/tests.js,rejects zero,Pass,Pass
+TC008,Unit,unit,tests/tests.js,rejects negative,Pass,Pass
+TC009,Unit,unit,tests/tests.js,rejects letters and 1e5,Pass,Pass
+TC010,Unit,unit,tests/tests.js,rejects 3 decimal places,Pass,Pass
+TC011,Unit,unit,tests/tests.js,rejects absurdly large amount,Pass,Pass
+TC012,Unit,unit,tests/tests.js,rejects two dots,Pass,Pass
+TC013,Unit,unit,tests/tests.js,formats with Indian grouping,Pass,Pass
+TC014,Unit,unit,tests/tests.js,formats small value,Pass,Pass
+TC015,Unit,unit,tests/tests.js,formats undefined as zero,Pass,Pass
+TC016,Unit,unit,tests/tests.js,valid date passes,Pass,Pass
+TC017,Unit,unit,tests/tests.js,rejects 31 Feb,Pass,Pass
+TC018,Unit,unit,tests/tests.js,accepts 29 Feb on a leap year only,Pass,Pass
+TC019,Unit,unit,tests/tests.js,rejects empty and wrong format,Pass,Pass
+TC020,Unit,unit,tests/tests.js,"toISODate uses local date, pads month and day",Pass,Pass
+TC021,Unit,unit,tests/tests.js,valid expense is cleaned (note trimmed),Pass,Pass
+TC022,Unit,unit,tests/tests.js,future date rejected,Pass,Pass
+TC023,Unit,unit,tests/tests.js,today is allowed,Pass,Pass
+TC024,Unit,unit,tests/tests.js,missing category rejected,Pass,Pass
+TC025,Unit,unit,tests/tests.js,note over 60 chars rejected,Pass,Pass
+TC026,Unit,unit,tests/tests.js,all errors reported together,Pass,Pass
+TC027,Unit,unit,tests/tests.js,month filter keeps only that month,Pass,Pass
+TC028,Unit,unit,tests/tests.js,empty month means all time,Pass,Pass
+TC029,Unit,unit,tests/tests.js,category filter,Pass,Pass
+TC030,Unit,unit,tests/tests.js,search is case-insensitive,Pass,Pass
+TC031,Unit,unit,tests/tests.js,sort by amount desc,Pass,Pass
+TC032,Unit,unit,tests/tests.js,same-date items fall back to newest created first,Pass,Pass
+TC033,Unit,unit,tests/tests.js,filtering does not change original array,Pass,Pass
+TC034,Unit,unit,tests/tests.js,sumPaise of empty list is 0,Pass,Pass
+TC035,Unit,unit,tests/tests.js,"totalsByCategory, biggest first",Pass,Pass
+TC036,Unit,unit,tests/tests.js,totalsByCategory of empty list is empty,Pass,Pass
+TC037,Unit,unit,tests/tests.js,csv wraps cells with commas and doubles quotes,Pass,Pass
+TC038,Unit,unit,tests/tests.js,csv neutralises formula-looking notes,Pass,Pass
+TC039,Unit,unit,tests/tests.js,makeId gives different ids,Pass,Pass
+TC040,Unit,edge,tests-task4/edge.js,parseAmount: null and undefined give an error not a crash,Pass,Pass
+TC041,Unit,edge,tests-task4/edge.js,parseAmount: number input 99.5 works,Pass,Pass
+TC042,Unit,edge,tests-task4/edge.js,parseAmount: spaces around number are trimmed,Pass,Pass
+TC043,Unit,edge,tests-task4/edge.js,parseAmount: lone dot rejected,Pass,Pass
+TC044,Unit,edge,tests-task4/edge.js,parseAmount: plus sign rejected,Pass,Pass
+TC045,Unit,edge,tests-task4/edge.js,parseAmount: currency symbol rejected,Pass,Pass
+TC046,Unit,edge,tests-task4/edge.js,parseAmount: smallest amount 0.01 is 1 paisa,Pass,Pass
+TC047,Unit,edge,tests-task4/edge.js,parseAmount: exact max 1 crore accepted,Pass,Pass
+TC048,Unit,edge,tests-task4/edge.js,parseAmount: one paisa over max rejected,Pass,Pass
+TC049,Unit,edge,tests-task4/edge.js,parseAmount: leading zeros 007 is 700 paise,Pass,Pass
+TC050,Unit,edge,tests-task4/edge.js,parseAmount: 19.99 does not drift (floating point check),Pass,Pass
+TC051,Unit,edge,tests-task4/edge.js,parseAmount: 1.15 stays 115,Pass,Pass
+TC052,Unit,edge,tests-task4/edge.js,formatMoney: zero,Pass,Pass
+TC053,Unit,edge,tests-task4/edge.js,formatMoney: one crore,Pass,Pass
+TC054,Unit,edge,tests-task4/edge.js,formatMoney: 99999 paise,Pass,Pass
+TC055,Unit,edge,tests-task4/edge.js,isValidDate: month 13 rejected,Pass,Pass
+TC056,Unit,edge,tests-task4/edge.js,isValidDate: day 00 rejected,Pass,Pass
+TC057,Unit,edge,tests-task4/edge.js,"isValidDate: 30 April ok, 31 April rejected",Pass,Pass
+TC058,Unit,edge,tests-task4/edge.js,isValidDate: 1900 is not a leap year,Pass,Pass
+TC059,Unit,edge,tests-task4/edge.js,isValidDate: 2000 is a leap year,Pass,Pass
+TC060,Unit,edge,tests-task4/edge.js,isValidDate: undefined and null are false,Pass,Pass
+TC061,Unit,edge,tests-task4/edge.js,validateExpense: all fields bad gives 3 errors,Pass,Pass
+TC062,Unit,edge,tests-task4/edge.js,validateExpense: today is allowed,Pass,Pass
+TC063,Unit,edge,tests-task4/edge.js,validateExpense: tomorrow rejected,Pass,Pass
+TC064,Unit,edge,tests-task4/edge.js,"validateExpense: note of exactly 60 chars ok, 61 rejected",Pass,Pass
+TC065,Unit,edge,tests-task4/edge.js,validateExpense: missing note field becomes empty string,Pass,Pass
+TC066,Unit,edge,tests-task4/edge.js,validateExpense: script tag in note is kept as plain text,Pass,Pass
+TC067,Unit,edge,tests-task4/edge.js,filterAndSort: empty list gives empty list,Pass,Pass
+TC068,Unit,edge,tests-task4/edge.js,filterAndSort: unknown sort falls back to newest first,Pass,Pass
+TC069,Unit,edge,tests-task4/edge.js,filterAndSort: same date ordered by createdAt,Pass,Pass
+TC070,Unit,edge,tests-task4/edge.js,filterAndSort: search is case insensitive and checks category,Pass,Pass
+TC071,Unit,edge,tests-task4/edge.js,filterAndSort: month filter excludes other months,Pass,Pass
+TC072,Unit,edge,tests-task4/edge.js,filterAndSort: category All keeps everything,Pass,Pass
+TC073,Unit,edge,tests-task4/edge.js,filterAndSort: does not change the original array,Pass,Pass
+TC074,Unit,edge,tests-task4/edge.js,filterAndSort: note missing does not crash search,Pass,Pass
+TC075,Unit,edge,tests-task4/edge.js,sumPaise: empty is 0,Pass,Pass
+TC076,Unit,edge,tests-task4/edge.js,sumPaise: ten times 0.10 is exactly 100 paise,Pass,Pass
+TC077,Unit,edge,tests-task4/edge.js,totalsByCategory: empty gives empty list,Pass,Pass
+TC078,Unit,edge,tests-task4/edge.js,totalsByCategory: sorted biggest first with percent,Pass,Pass
+TC079,Unit,edge,tests-task4/edge.js,toCSV: no expenses gives header only,Pass,Pass
+TC080,Unit,edge,tests-task4/edge.js,toCSV: amount written with 2 decimals,Pass,Pass
+TC081,Unit,edge,tests-task4/edge.js,toCSV: newline in note is wrapped in quotes,Pass,Pass
+TC082,Unit,edge,tests-task4/edge.js,toCSV: plus and at-sign notes get a leading quote,Pass,Pass
+TC083,Unit,edge,tests-task4/edge.js,makeId: 1000 ids are all different,Pass,Pass
+TC084,Integration,integration,tests-task4/integration.js,fresh start: no saved data gives empty store and no warning,Pass,Pass
+TC085,Integration,integration,tests-task4/integration.js,add saves to localStorage and survives a reload,Pass,Pass
+TC086,Integration,integration,tests-task4/integration.js,update changes only the chosen expense,Pass,Pass
+TC087,Integration,integration,tests-task4/integration.js,update with unknown id returns false and keeps data,Pass,Pass
+TC088,Integration,integration,tests-task4/integration.js,delete then restore (undo) brings the same expense back,Pass,Pass
+TC089,Integration,integration,tests-task4/integration.js,remove with unknown id returns null,Pass,Pass
+TC090,Integration,integration,tests-task4/integration.js,subscribers are called once for each change,Pass,Pass
+TC091,Integration,integration,tests-task4/integration.js,subscriber is not called when update misses,Pass,Pass
+TC092,Integration,integration,tests-task4/integration.js,validate then store then total: form to summary flow,Pass,Pass
+TC093,Integration,integration,tests-task4/integration.js,invalid form input never reaches the store,Pass,Pass
+TC094,Integration,integration,tests-task4/integration.js,export of stored data has one row per expense plus header,Pass,Pass
+TC095,Integration,integration,tests-task4/integration.js,"corrupted JSON: starts fresh, warns, keeps a backup",Pass,Pass
+TC096,Integration,integration,tests-task4/integration.js,"damaged items are skipped and counted, good ones loaded",Pass,Pass
+TC097,Integration,integration,tests-task4/integration.js,expenses field is not an array: loads empty without crashing,Pass,Pass
+TC098,Integration,integration,tests-task4/integration.js,bad budget value is ignored,Pass,Pass
+TC099,Integration,integration,tests-task4/integration.js,"storage blocked for reading: warning shown, app still works",Pass,Pass
+TC100,Integration,integration,tests-task4/integration.js,"storage full: saveFailed flag is set, data stays in memory",Pass,Pass
+TC101,Integration,integration,tests-task4/integration.js,missing createdAt on old data defaults to 0,Pass,Pass
+TC102,Performance,performance,tests-task4/performance.js,"filter and sort 10,000 expenses takes under 200 ms",Pass,Pass
+TC103,Performance,performance,tests-task4/performance.js,"category totals for 10,000 expenses takes under 100 ms",Pass,Pass
+TC104,Performance,performance,tests-task4/performance.js,"csv export of 10,000 expenses takes under 300 ms",Pass,Pass
+TC105,Performance,performance,tests-task4/performance.js,"sum of 10,000 expenses is exact integer",Pass,Pass
+TC106,System,system,tests-task4/system.html,page starts with the empty message showing,Pass,Pass
+TC107,System,system,tests-task4/system.html,letters in amount show an error,Pass,Pass
+TC108,System,system,tests-task4/system.html,nothing saved after invalid submit,Pass,Pass
+TC109,System,system,tests-task4/system.html,two expenses are listed,Pass,Pass
+TC110,System,system,tests-task4/system.html,total shows exactly 0.30,Pass,Pass
+TC111,System,system,tests-task4/system.html,"html in note is shown as text, not rendered",Pass,Pass
+TC112,System,system,tests-task4/system.html,search for tea leaves one row,Pass,Pass
+TC113,System,system,tests-task4/system.html,clearing search brings all 3 rows back,Pass,Pass
+TC114,System,system,tests-task4/system.html,budget below spending says over budget,Pass,Pass
+TC115,System,system,tests-task4/system.html,data reached localStorage,Pass,Pass
+TC116,System,system,tests-task4/system.html,no script errors during the run,Pass,Pass

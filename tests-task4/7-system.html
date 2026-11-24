@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SpendWise: a simple expense tracker built with plain HTML, CSS and JavaScript.">
+  <title>SpendWise | Expense Tracker</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>SpendWise</h1>
+    <p class="tagline">Track where your money goes. Everything stays in your browser.</p>
+  </header>
+
+<div id="notice" class="notice" role="status" hidden></div>
+
+  <main class="layout">
+
+    <section class="card" aria-labelledby="form-title">
+      <h2 id="form-title">Add expense</h2>
+      <form id="expense-form" novalidate>
+        <input type="hidden" id="edit-id">
+
+        <label for="amount">Amount (&#8377;)</label>
+        <input id="amount" name="amount" type="text" inputmode="decimal" placeholder="e.g. 249.50" autocomplete="off">
+        <p class="error" id="amount-error" aria-live="polite"></p>
+
+        <label for="category">Category</label>
+        <select id="category" name="category"></select>
+        <p class="error" id="category-error" aria-live="polite"></p>
+
+        <label for="date">Date</label>
+        <input id="date" name="date" type="date">
+        <p class="error" id="date-error" aria-live="polite"></p>
+
+        <label for="note">Note <span class="optional">(optional, <span id="note-count">0</span>/60)</span></label>
+        <input id="note" name="note" type="text" maxlength="60" autocomplete="off">
+        <p class="error" id="note-error" aria-live="polite"></p>
+
+        <div class="row">
+          <button type="submit" id="submit-btn" class="btn primary">Add expense</button>
+          <button type="button" id="cancel-edit" class="btn" hidden>Cancel edit</button>
+        </div>
+      </form>
+    </section>
+
+<section class="card" aria-labelledby="summary-title">
+      <h2 id="summary-title">Summary</h2>
+      <div class="field-inline">
+        <label for="month-filter">Month</label>
+        <input id="month-filter" type="month">
+      </div>
+      <p class="big-number" id="total">&#8377;0.00</p>
+      <p class="muted" id="total-caption">spent this month</p>
+
+      <div class="budget">
+        <div class="field-inline">
+          <label for="budget-input">Monthly budget (&#8377;)</label>
+          <input id="budget-input" type="text" inputmode="decimal" placeholder="e.g. 15000">
+          <button type="button" id="budget-save" class="btn small">Set</button>
+        </div>
+        <p class="error" id="budget-error" aria-live="polite"></p>
+        <div class="bar" aria-hidden="true"><div class="bar-fill" id="budget-fill"></div></div>
+        <p class="muted" id="budget-text">No budget set.</p>
+      </div>
+
+      <h3>By category</h3>
+      <ul id="chart" class="chart"></ul>
+    </section>
+
+<section class="card wide" aria-labelledby="list-title">
+      <h2 id="list-title">Expenses</h2>
+      <div class="filters">
+        <input id="search" type="search" placeholder="Search notes..." aria-label="Search notes">
+        <select id="category-filter" aria-label="Filter by category"></select>
+        <select id="sort" aria-label="Sort expenses">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="amount-desc">Highest amount</option>
+          <option value="amount-asc">Lowest amount</option>
+        </select>
+        <button type="button" id="export-btn" class="btn small">Export CSV</button>
+      </div>
+      <ul id="expense-list" class="expense-list"></ul>
+      <p id="empty" class="muted empty" hidden></p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <footer class="site-footer">
+    <p>Built by Venkatesh Pola as a Task 3 practical project. Plain HTML, CSS and JavaScript.</p>
+  </footer>
+
+<script src="../js/utils.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/store.js"></script>
+  <script src="../js/form.js"></script>
+  <script src="../js/summary.js"></script>
+  <script src="../js/list.js"></script>
+  <script src="../js/app.js"></script>
+<script src="system-steps.js"></script>
+</body>
+</html>
